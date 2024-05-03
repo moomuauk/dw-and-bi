@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "amazing-craft-422207-m6",
+  "private_key_id": "91d7e36078d09d878e1a9a936f829fadc42b67ce",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDz1KxdBkc96z58\nURvZvDAUk/M7QKMZ+/fU0UZ8sMkmt/tLmve0Z3dFbqfFmaUQoc3LK1zUbaJ9xjMr\nc04VSUX3b56vTPQ1JnfjaZl4P299Gn0U+0CN89BLYeyc3RRvt0H7yMr8pqqPxNbR\nQpo+4HRlKEqiO5bjV3qBJR/Ti/Lfb7J9F3u1IamxgR5mouS7r5Qf0DFd1pSOGpuW\nmwnvV69CSQzjmKiedWLOUKHzaDeLG81VN1bFtCEhpxttzi84tcr65CheUW11Vc7J\n9wdDX8sslY6ghYumwHjIVWtJI4ACsnIpHfK53X9IRW0s2na0QzIub2m45wlFjZkK\nfWWPdquLAgMBAAECggEAQsnlAsAnAItw/L182vnk06YpEHhmlMYDfyxp2drU5oGr\n2GxU4Hoc3gxu8T3iTHl9tOKmVVvIkBobxxGY+FSvURUmis8R74MfgM/apWj+4W5B\nh99AsgFwc02Z8efO4sD4Vn8MNwNyIdphm0VamdGCoHjWZLTc4l4CZOCl5JznhJL7\nkqEpxSbw92tCb7BtDzAvsR5z9azlRZjukOyXI/J0SLlj4u82U3I6FzQkZkfU518n\n0DEy1JzWxFCI1NxMslrc5rHanqEYxgqikcM8FNROjGCMGa2lObtIT5ykUEpYiErF\nU3h8d+Sx9h8uaSX9XuO9yzU4jNuZS6kDZqhz4UtQJQKBgQD/KkZb7+4QeCZAtSv6\nCdgm8qIn8Umb4VPQWHmQisjxtQ2ELGG4YcqOpMnkhNe0cQhPgjZii90PUTZzSPXk\nY+sO7OCrndCMyGA4sjyYbKrRmUOh1MZBOG6PkuUzBK0ED0mz4N+02roDlBlVipFG\nGc9BZAKPMoJFLREBhoIxTF9CRQKBgQD0oOeizpFafH97daD5mkIOFtpME5LMMF0e\nxPSwDabfj4/Kn67higQr0sotVhcF5cnjwR7mqrB3vXDKSuPzFyOEiYdQvJmdNrJz\n5alzZOFKptk+nPYwQAlzt38CV33LmDU/FLcHvWySM9wrBhGuFaCscoITsAoqeezf\nR6HeJxv7jwKBgQDusiJNgN4H5A2MvK5d4fWlQZa1nL8KJjhcj1dxApNFoOP6//WO\nIVT2KWt/7VFHx/FJR3sOpt3tpUA1ikwUEfBi7u6hPClKeWuhvgJ3aDhHiIM/ESdA\n/cRXZMgp+LbNNGvy7Gr46R/XlyQ35D9P/3blKeRHBq3cfnMJJUYHTfVSrQKBgQCu\nsmH5YG9pIVOhBUXqOoFFsog+oBPLghZeLOVY/MbZDJrxZsvrATctXKFJcxuJ+KoO\n3hGFRQw01rK/pG/ZYALbWaOqwqUpIrCaF77FS5ugRjsKfelKV9DoNHidYYHSbWZJ\nIC/9dQcd+a8XgoQJwCQ4QqYmDSeVYfEJGwy7q05OfQKBgBNP/LsUb3UdYJLEa5mz\n2yP+wwYHnBl0xaMkyOfitSiiGum93OPScOF2eJ7TADsfkJtbQ3pxVwTtdiQv+ZgU\nfccl9yqzRNbtCEQdGESFyIfP1azfy9UbqYkLx4Q7JgW8jUVflzIh/iymGWehPztQ\nZjvUJb+0TjbZRGD/7HBG3lGs\n-----END PRIVATE KEY-----\n",
+  "client_email": "swu-ds525-load-data-to-bigquer@amazing-craft-422207-m6.iam.gserviceaccount.com",
+  "client_id": "108649888699647084775",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/swu-ds525-load-data-to-bigquer%40amazing-craft-422207-m6.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

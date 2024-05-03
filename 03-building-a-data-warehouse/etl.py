@@ -1,96 +1,98 @@
-import psycopg2
+import csv
+import glob
+import json
+import os
+from typing import List
+
+from google.cloud import bigquery
+from google.oauth2 import service_account
 
 
-drop_table_queries = [
-    "DROP TABLE IF EXISTS events",
-]
-create_table_queries = [
+def get_files(filepath: str) -> List[str]:
     """
-    CREATE TABLE IF NOT EXISTS staging_events (
-        id text,
-        type text,
-        actor text,
-        repo text,
-        created_at text
+    Description: This function is responsible for listing the files in a directory
+    """
+
+    all_files = []
+    for root, dirs, files in os.walk(filepath):
+        files = glob.glob(os.path.join(root, "*.json"))
+        for f in files:
+            all_files.append(os.path.abspath(f))
+
+    num_files = len(all_files)
+    print(f"{num_files} files found in {filepath}")
+
+    return all_files
+
+
+def main(dataset_id, table_id, file_path):
+    # โค้ดส่วนนี้จะเป็นการใช้ Keyfile เพื่อสร้าง Credentials เอาไว้เชื่อมต่อกับ BigQuery
+    # โดยการสร้าง Keyfile สามารถดูได้จากลิ้งค์ About Google Cloud Platform (GCP)
+    # ที่หัวข้อ How to Create Service Account
+    #
+    # การจะใช้ Keyfile ได้ เราต้องกำหนด File Path ก่อน ซึ่งวิธีกำหนด File Path เราสามารถ
+    # ทำได้โดยการเซตค่า Environement Variable ที่ชื่อ KEYFILE_PATH ได้ จะทำให้เวลาที่เราปรับ
+    # เปลี่ยน File Path เราจะได้ไม่ต้องกลับมาแก้โค้ด
+    # keyfile = os.environ.get("KEYFILE_PATH")
+    #
+    # แต่เพื่อความง่ายเราสามารถกำหนด File Path ไปได้เลยตรง ๆ
+    keyfile = "amazing-craft-422207-m6-91d7e36078d0.json"
+    service_account_info = json.load(open(keyfile))
+    credentials = service_account.Credentials.from_service_account_info(service_account_info)
+
+    # โค้ดส่วนนี้จะเป็นการสร้าง Client เชื่อมต่อไปยังโปรเจค GCP ของเรา โดยใช้ Credentials ที่
+    # สร้างจากโค้ดข้างต้น
+    project_id = "amazing-craft-422207-m6"
+    client = bigquery.Client(
+        project=project_id,
+        credentials=credentials,
     )
-    """,
-    """
-    CREATE TABLE IF NOT EXISTS events (
-        id int
+
+    # โค้ดส่วนนี้เป็นการ Configure Job ที่เราจะส่งไปทำงานที่ BigQuery โดยหลัก ๆ เราก็จะกำหนดว่า
+    # ไฟล์ที่เราจะโหลดขึ้นไปมีฟอร์แมตอะไร มี Schema หน้าตาประมาณไหน
+    job_config = bigquery.LoadJobConfig(
+        skip_leading_rows=1,
+        write_disposition=bigquery.WriteDisposition.WRITE_TRUNCATE,
+        source_format=bigquery.SourceFormat.CSV,
+        schema=[
+            bigquery.SchemaField("id", bigquery.SqlTypeNames.STRING),
+            bigquery.SchemaField("type", bigquery.SqlTypeNames.STRING),
+            bigquery.SchemaField("actor", bigquery.SqlTypeNames.STRING),
+        ],
     )
-    """,
-]
-copy_table_queries = [
-    """
-    COPY staging_events FROM 's3://zkan-swu-labs/github_events_01.json'
-    CREDENTIALS 'aws_iam_role=arn:aws:iam::377290081649:role/LabRole'
-    JSON 's3://zkan-swu-labs/events_json_path.json'
-    REGION 'us-east-1'
-    """,
-]
-insert_table_queries = [
-    """
-    INSERT INTO
-      events (
-        id
-      )
-    SELECT
-      DISTINCT id,
-    FROM
-      staging_events
-    WHERE
-      id NOT IN (SELECT DISTINCT id FROM events)
-    """,
-]
 
+    # โค้ดส่วนนี้จะเป็นการอ่านไฟล์ CSV และโหลดขึ้นไปยัง BigQuery
+    with open(file_path, "rb") as f:
+        table_id = f"{project_id}.{dataset_id}.{table_id}"
+        job = client.load_table_from_file(f, table_id, job_config=job_config)
+        job.result()
 
-def drop_tables(cur, conn):
-    for query in drop_table_queries:
-        cur.execute(query)
-        conn.commit()
-
-
-def create_tables(cur, conn):
-    for query in create_table_queries:
-        cur.execute(query)
-        conn.commit()
-
-
-def load_staging_tables(cur, conn):
-    for query in copy_table_queries:
-        cur.execute(query)
-        conn.commit()
-
-
-def insert_tables(cur, conn):
-    for query in insert_table_queries:
-        cur.execute(query)
-        conn.commit()
-
-
-def main():
-    host = "redshift-cluster-1.cwryxvpilhye.us-east-1.redshift.amazonaws.com"
-    dbname = "dev"
-    user = "awsuser"
-    password = ""
-    port = "5439"
-    conn_str = f"host={host} dbname={dbname} user={user} password={password} port={port}"
-    conn = psycopg2.connect(conn_str)
-    cur = conn.cursor()
-
-    # drop_tables(cur, conn)
-    # create_tables(cur, conn)
-    # load_tables(cur, conn)
-    # insert_tables(cur, conn)
-
-    query = "select * from category"
-    cur.execute(query)
-    records = cur.fetchall()
-    for row in records:
-        print(row)
-
-    conn.close()
+    # โค้ดส่วนนี้จะเป็นการดึงข้อมูลจากตารางที่เราเพิ่งโหลดข้อมูลเข้าไป เพื่อจะตรวจสอบว่าเราโหลดข้อมูล
+    # เข้าไปทั้งหมดกี่แถว มีจำนวน Column เท่าไร
+    table = client.get_table(table_id)
+    print(f"Loaded {table.num_rows} rows and {len(table.schema)} columns to {table_id}")
 
 
 if __name__ == "__main__":
-    main()
+    all_files = get_files(filepath="../data")
+    print(all_files)
+
+    with open("github_events.csv", "w") as csv_file:
+        writer = csv.writer(csv_file)
+        writer.writerow([
+            "id",
+            "type", 
+            "login",
+        ])
+
+        for datafile in all_files:
+            with open(datafile, "r") as f:
+                data = json.loads(f.read())
+                for each in data:
+                    writer.writerow([
+                        each["id"],
+                        each["type"],
+                        each["actor"]["login"],
+                    ])
+
+    main(dataset_id="github", table_id="events", file_path="github_events.csv")
