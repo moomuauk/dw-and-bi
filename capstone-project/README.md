@@ -1,7 +1,7 @@
 # Capstone Project DS525 (2/66)
 
 สมาชิกในกลุ่ม
-น.ส.กมลทิพย์ มนตรีสา   รหัสนิสิต 65199160171
+น.ส.กมลทิพย์ มนตรีสา   รหัสนิสิต 65199160171 <br>
 น.ส.กมลวรรณ เนียมเที่ยง รหัสนิสิต 65199160172
 
 
@@ -71,29 +71,5 @@ Load — เก็บไฟล์ผลลัพธ์ไว้ใน data lake 
 4. Start environment ในขณะที่อยู่ใน ENV เปิดใช้งาน Apache airflow port 8080
     docker-compose up
 
-### Data Warehouse
-นำข้อมูลจาก Google storage เข้า Google bigquery ใช้ Operator = GCSToBigQueryOperator
-
-### Data Transformation (DBT)
-
-Transform ข้อมูล raw data ไปเป็น Cleaned data
-
-Download library dbt-core dbt-bigquery
-    pip install dbt-core dbt-bigquery
-
-สร้าง project profile dbt
-    dbt init
-
-สร้าง project profile สร้าง file ใน folder project-capstone/models ด้วยชื่อ profiles.yml
-    code /home/codespace/.dbt/profiles.yml
-
-ทดสอบการ connection กับ bigquery
-    dbt debug
-    dbt run
-    dbt test
-
-จบงานปิด Docker
-    docker compose down
-
- 
+Document : https://docs.google.com/document/d/10sp923yzVIl9Ml2JZn4gygK2VQG7dGYRXBNEqR6Ot8U/edit
 
